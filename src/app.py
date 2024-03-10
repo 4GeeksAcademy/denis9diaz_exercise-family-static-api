@@ -34,9 +34,59 @@ def handle_hello():
         "hello": "world",
         "family": members
     }
+    return jsonify(members), 200
 
 
-    return jsonify(response_body), 200
+@app.route('/member/<int:id>', methods=['GET'])
+def get_member(id):
+    member = jackson_family.get_member(id)
+    if (member == None):
+        return jsonify("El miembro no existe"), 404
+    print (id)
+    return jsonify(member), 200
+
+
+@app.route('/member', methods=['POST'])
+def add_member():
+    body = request.get_json()
+    if "id" in body:
+        id = body["id"]
+    else:
+        id = jackson_family._generateId()
+
+    new_member = {
+        "id": id,
+        "first_name": body["first_name"],
+        "last_name": jackson_family.last_name,
+        "age": body["age"],
+        "lucky_numbers": body["lucky_numbers"],
+    }
+    jackson_family.add_member(new_member)
+    print(body)
+    return jsonify("member added"), 200
+
+@app.route('/member/<int:id>', methods=['DELETE'])
+def delete_member(id):
+    members = jackson_family.delete_member(id)
+    if members:
+        for member in members:
+            if member["id"] == id:
+                members.remove(member)
+        return jsonify(members), 200
+    else:
+        return jsonify("Miembro no encontrado"), 404
+
+@app.route('/member/3443', methods=['DELETE'])
+def delete_specific_member():
+    # Suponiendo que jackson_family es una instancia de una clase de familia
+    members = jackson_family.delete_member(3443)
+    if members:
+        for member in members:
+            if member["id"] == 3443:
+                members.remove(member)  # Elimina el miembro
+        return jsonify({"done": True}), 200
+    else:
+        return jsonify({"done": False}), 404
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
