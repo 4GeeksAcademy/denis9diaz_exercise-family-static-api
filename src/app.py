@@ -73,15 +73,13 @@ def delete_member(id):
             members.remove(member)
     return jsonify(members), 200
 
-
 @app.route('/member/3443', methods=['DELETE'])
 def delete_specific_member():
-    # Suponiendo que jackson_family es una instancia de una clase de familia
     members = jackson_family.delete_member(3443)
     if members:
         for member in members:
             if member["id"] == 3443:
-                members.remove(member)  # Elimina el miembro
+                members.remove(member)
         return jsonify({"done": True}), 200
     else:
         return jsonify({"done": False}), 404
