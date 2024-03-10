@@ -68,13 +68,11 @@ def add_member():
 @app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
     members = jackson_family.delete_member(id)
-    if members:
-        for member in members:
-            if member["id"] == id:
-                members.remove(member)
-        return jsonify(members), 200
-    else:
-        return jsonify("Miembro no encontrado"), 404
+    for member in members:
+        if member["id"] == id:
+            members.remove(member)
+    return jsonify(members), 200
+
 
 @app.route('/member/3443', methods=['DELETE'])
 def delete_specific_member():
