@@ -65,24 +65,14 @@ def add_member():
     print(body)
     return jsonify("member added"), 200
 
+
 @app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
     members = jackson_family.delete_member(id)
-    for member in members:
-        if member["id"] == id:
-            members.remove(member)
-    return jsonify(members), 200
-
-@app.route('/member/3443', methods=['DELETE'])
-def delete_specific_member():
-    members = jackson_family.delete_member(3443)
-    if members:
-        for member in members:
-            if member["id"] == 3443:
-                members.remove(member)
-        return jsonify({"done": True}), 200
-    else:
-        return jsonify({"done": False}), 404
+    if members is None:
+        return jsonify({"done" : False})
+    return jsonify({"done": True}), 200
+    
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
