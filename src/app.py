@@ -62,7 +62,7 @@ def add_member():
     jackson_family.add_member(new_member)
     print(body)
     return jsonify("member added"), 200
-s
+
 @app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
     members = jackson_family.delete_member(id)
